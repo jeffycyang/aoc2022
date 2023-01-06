@@ -9,10 +9,9 @@ const advInput = fs.readFileSync('./input.txt')
   });
 
 const getMostCalories = input => {
-  console.log(input)
-  console.log(input.length)
-  console.log(typeof input[0])
-  let maxCal = 0;
+  // console.log(input)
+  // console.log(input.length)
+  const maxCals = [0, 0, 0];
 
   let i = 0;
   while (i < input.length) {
@@ -23,12 +22,22 @@ const getMostCalories = input => {
       i++;
     }
 
-    if (maxCal <= currCal) maxCal = currCal;
+    if (maxCals.some(e => e === 0)) {
+      const j = maxCals.findIndex(e => e === 0);
+      maxCals[j] = currCal;
+    } else {
+      if (maxCals.some(e => e <= currCal)) {
+        maxCals.sort((a,b)=> b - a);
+        maxCals.unshift(currCal);
+        maxCals.pop();
+      }
+    }
 
     i++;
   }
 
-  return maxCal;
+  console.log(maxCals)
+  return maxCals.reduce((acc, curr) => acc + curr, 0);
 }
 
 const advOutput = getMostCalories(advInput);
